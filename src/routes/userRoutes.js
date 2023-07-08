@@ -1,5 +1,7 @@
 import express from "express";
-import { userRegester } from "../controller/userController.js"
+import { userRegester, getUserProfile, userLogin, updateUser } from "../controller/userController.js"
+import { Authentication } from "../services/authentication.js";
+import { Autherisation } from "../services/autherisation.js";
 
 const router = express.Router();
 
@@ -8,12 +10,12 @@ const router = express.Router();
 router.post('/register', userRegester);
 
 //Login User ---------------------------------------
-// router.post('/login', );
+router.post('/login', userLogin);
 
 //Get User -----------------------------------------
-// router.get('/user/:userId/profile', ); //Authentication
+router.get('/user/:userId/profile', Authentication, Autherisation, getUserProfile); //Authentication & Autherisation
 
 //Update User --------------------------------------
-// router.put('/user/:userId/profile', ); //Authentication & Autherisation
+router.put('/user/:userId/profile', updateUser); //Authentication & Autherisation
 
 export default router
