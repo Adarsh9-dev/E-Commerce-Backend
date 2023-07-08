@@ -16,6 +16,6 @@ router.post('/login', userLogin);
 router.get('/user/:userId/profile', Authentication, Autherisation, getUserProfile); //Authentication & Autherisation
 
 //Update User --------------------------------------
-router.put('/user/:userId/profile', updateUser); //Authentication & Autherisation
+router.put('/user/:userId/profile', Authentication, Autherisation, updateUser); //Authentication & Autherisation
 
 export default router
