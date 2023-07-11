@@ -5,16 +5,16 @@ import { Autherisation } from '../services/autherisation.js';
 
 const router = express.Router();
 
-//Add Cart
+//Add Cart --------------------------------------
 router.post('/users/:userId/cart', Authentication, Autherisation, addCart);
 
-//Update Cart
+//Update Cart -----------------------------------
 router.put('/users/:userId/cart', Authentication, Autherisation, updateCart);
 
-//Show Cart
+//Show Cart -------------------------------------
 router.get('/users/:userId/cart', Authentication, Autherisation, getCart);
 
-//Delete Cart
+//Delete Cart -----------------------------------
 router.delete('/users/:userId/cart', Authentication, Autherisation, deleteCart)
 
 
