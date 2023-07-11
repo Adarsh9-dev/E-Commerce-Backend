@@ -17,6 +17,11 @@ The project is organized into different features, including User, Product, Cart,
 
 The project uses JWT (JSON Web Token) for authentication. To send a JWT token with a request, include it in the `Authorization` header as a Bearer token.
 
+## AWS S3
+
+The project uses AWS S3 for storing User Profile image and Product Image.
+
+
 ## Features
 
 The project is divided into four features, and each feature follows the same development and testing process.
