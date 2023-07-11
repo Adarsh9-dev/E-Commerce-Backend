@@ -50,3 +50,18 @@ export const validObjectId = (data) => {
   }
   return false;
 }
+
+//Valid Size ----------------------------
+export const validSize = (data) => {
+  let flag = 1;
+  const size = ["S", "XS","M","X", "L","XXL", "XL"];
+  data.map((index)=> {
+    if (!size.includes(index)) {
+      flag = 0;
+    }
+  })
+  if (flag === 1) {
+    return true;
+  }
+  return false;
+} 

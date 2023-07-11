@@ -25,7 +25,7 @@ export const userRegester = async (req, res) => {
     const { street1, city1, pincode1 } = billingObj;
     
     //Mandotory Field Checking -------------------
-    if (!fname || !lname || !email || !file || !phone || !password || !street || !city || !pincode || !street1 || !city1 || !pincode1) {
+    if (!fname || !lname || !email || file.length === 0 || !phone || !password || !street || !city || !pincode || !street1 || !city1 || !pincode1) {
       return res.status(400).json({status: false, message: "Something is Missing"})
     }
 
