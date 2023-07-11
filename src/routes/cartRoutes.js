@@ -1,7 +1,7 @@
 import express from "express";
 import { addCart, getCart, deleteCart, updateCart } from "../controller/cartController.js";
-import { Authentication } from '../services/authentication.js';
-import { Autherisation } from '../services/autherisation.js';
+import { Authentication } from '../middleware/authentication.js';
+import { Autherisation } from '../middleware/autherisation.js';
 
 const router = express.Router();
 
