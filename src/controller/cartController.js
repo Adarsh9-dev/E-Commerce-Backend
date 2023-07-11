@@ -1,7 +1,7 @@
 import User from "../models/userModel.js";
 import Product from "../models/productModel.js";
 import Cart from "../models/cartModel.js";
-import { validReqBody, validIsNumber, validSize, validObjectId } from "../utils/validator/validator.js";
+import { validReqBody, validIsNumber, validObjectId } from "../utils/validator/validator.js";
 
 
 export const addCart = async (req, res) => {
@@ -39,6 +39,9 @@ export const addCart = async (req, res) => {
 
     //Convert quantity to Integer ----------------
     quantity = parseInt(quantity);
+    if (quantity <= 0 || !validIsNumber(quantity)) {
+      return res.status(400).json({status: false, message: "Invalid Quantity"});
+    }
 
     //Product Exist Checking ---------------------
     const isProductExist = await Product.findOne({_id: productId, isDeleted: false});
@@ -232,29 +235,38 @@ export const updateCart = async (req, res) => {
     //Cart Exist Check ---------------------------
     const cartId = await Cart.findOne({userId: userId})
 
+    //Cart not Exist -----------------------------
     if (!cartId) {
       return res.status(404).json({status: false, message: "Cart not Exist"});
     }
 
+    //Cart Empty ---------------------------------
     if (cartId.items.length === 0) {
       return res.status(400).json({status: false, message: "Cart not Exist"}); 
     }
 
+    //Extracting from Body -----------------------
     const {productId, removeProduct} = req.body;
     
+    //Converting string to Integer ---------------
     const removeKey = parseInt(removeProduct);
 
+    //product Id and removeProduct not exist -----
     if (!productId || !removeProduct) {
       return res.status(400).json({status: false, message: "Missing item"}); 
     }
 
+    //Product Exist checking ---------------------
     const isProductExist = await Product.findOne({_id: productId, isDeleted: false});
 
+    //Product not Exist --------------------------
     if (!isProductExist) {
       return res.status(404).json({status: false, message: "Product not Exist"});
     }
     
+    //Delete product from Cart Item -------------- 
     if (removeKey === 0) {
+      //Collecting delete product index and Price 
       let deleteIndex = -1;
       let deletePrice = 0;
 
@@ -265,20 +277,25 @@ export const updateCart = async (req, res) => {
         }
       })
 
+      //Product not exist ------------------------
       if (deleteIndex === -1) {
         return res.status(400).json({status: false, message: "Product Not exist in Cart"}); 
       }
+
 
       cartId.items.splice(deleteIndex, 1);
       cartId.totalItems -= 1;
       cartId.totalPrice -= deletePrice;
 
+      //Update Cart by deleting productId --------
       const updateObj = await Cart.findByIdAndUpdate(cartId._id, cartId, {new: true});
 
+      //Success Respond --------------------------
       return res.status(200).json({status: true, message: "Cart Update Successfully", data: updateObj})
-
     }
+    //Reduce quantity of the Product -------------
     else if (removeKey === 1) {
+      //Collecting delete product index ----------
       let deleteIndex = -1;
 
       cartId.items.map((index,key)=> {
@@ -287,6 +304,7 @@ export const updateCart = async (req, res) => {
         }
       })
 
+      //Product Not exist ------------------------
       if (deleteIndex === -1) {
         return res.status(400).json({status: false, message: "Product Not exist in Cart"}); 
       }
@@ -299,16 +317,19 @@ export const updateCart = async (req, res) => {
         cartId.totalItems -= 1;
       }
 
+      //Update Cart by reducing productId ---------
       const updateObj = await Cart.findByIdAndUpdate(cartId._id, cartId, {new: true});
 
       return res.status(200).json({status: true, message: "Cart Update Successfully", data: updateObj})
 
     }
+    //Invalid Remove Key --------------------------
     else {
       return res.status(400).json({status: false, message: "Invalid Remove key"}); 
     }
 
   }catch(err) {
+    //Error Respond -------------------------------
     res.status(500).json({status: false, message: err.message})
   }
 }

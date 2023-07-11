@@ -5,7 +5,6 @@ import { Autherisation } from "../services/autherisation.js";
 
 const router = express.Router();
 
-
 //Register User ------------------------------------
 router.post('/register', userRegester);
 
@@ -13,9 +12,10 @@ router.post('/register', userRegester);
 router.post('/login', userLogin);
 
 //Get User -----------------------------------------
-router.get('/user/:userId/profile', Authentication, Autherisation, getUserProfile); //Authentication & Autherisation
+router.get('/user/:userId/profile', Authentication, Autherisation, getUserProfile); 
 
 //Update User --------------------------------------
-router.put('/user/:userId/profile', Authentication, Autherisation, updateUser); //Authentication & Autherisation
+router.put('/user/:userId/profile', Authentication, Autherisation, updateUser); 
+
 
 export default router

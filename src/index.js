@@ -6,6 +6,7 @@ import multer from "multer";
 import userRoute from "./routes/userRoutes.js";
 import productRoute from "./routes/productRoutes.js";
 import cartRoute from "./routes/cartRoutes.js";
+import orderRoute from "./routes/orderRoutes.js";
 
 const app = express();
 const Port = process.env.PORT || 8080;
@@ -20,6 +21,7 @@ app.use(multer().any())
 app.use('/', userRoute);
 app.use('/', productRoute);
 app.use('/', cartRoute);
+app.use('/', orderRoute);
 
 //Server started ----------------------------------
 app.listen(Port, ()=> {
