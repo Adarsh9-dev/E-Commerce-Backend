@@ -2,8 +2,13 @@ import jwt from "jsonwebtoken";
 
 export const Authentication = async (req, res, next) => {
   try {
+    //Checking header Present or not ------------------------
+    if (!req.headers.authorization) {
+      return res.status(400).json({status: false, message: "Token not Present in Header"});
+    }
+
     //Collecting token from Req Headers ----------------------
-    const token = req.headers['x-api-key'];
+    const token = req.headers.authorization.split(' ')[1];
 
     //Token not present --------------------------------------
     if (!token) {
@@ -11,18 +16,19 @@ export const Authentication = async (req, res, next) => {
     }
 
     //Token Verify Checking -----------------------------------
-    const isVerified = await jwt.verify(token, process.env.JWT_SECRET_KEY);
+    jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, decoded) => {
+      //Invalid  Token ------------------------------------------
+      if (err) {
+        return res.status(401).json({status: false, message: err.message})
+      } 
+      else {
+        //Storing payload data -------------------------------------
+        req.decodeedData = decoded.data;
 
-    //Invalid  Token ------------------------------------------
-    if (!isVerified) {
-      return res.status(400).json({status: false, message: "Invalid Token"});
-    }
-
-    //Storing payload data -------------------------------------
-    req.decodeedData = isVerified.data;
-
-    //next middleware | Router handeler ------------------------
-    next();
+        //next middleware | Router handeler ------------------------
+        next();
+      }
+    });
 
   } catch(err) {
     //Error Respond ---------------------------------------------
